@@ -1,15 +1,30 @@
 // Messaging Platform App
 let currentUser = null;
-let users = JSON.parse(localStorage.getItem('users')) || [];
+let users = [];
 let currentChat = null;
-let messages = JSON.parse(localStorage.getItem('messages')) || {};
+let messages = {};
 
 // Initialize
 window.addEventListener('load', () => {
+    // Clear all storage on first load to reset
+    if (!localStorage.getItem('initialized')) {
+        localStorage.clear();
+        localStorage.setItem('initialized', 'true');
+    }
+    
+    // Load fresh data
+    users = JSON.parse(localStorage.getItem('users')) || [];
+    messages = JSON.parse(localStorage.getItem('messages')) || {};
+    
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
-        currentUser = JSON.parse(savedUser);
-        loadApp();
+        try {
+            currentUser = JSON.parse(savedUser);
+            loadApp();
+        } catch (e) {
+            localStorage.removeItem('currentUser');
+            showSection('auth');
+        }
     } else {
         showSection('auth');
     }
@@ -43,6 +58,9 @@ function signup() {
     const password = document.getElementById('signupPassword').value;
     const confirm = document.getElementById('signupConfirm').value;
 
+    console.log('Sign up attempt:', username);
+    console.log('Current users:', users);
+
     if (!username || !password || !confirm) {
         alert('Please fill all fields');
         return;
@@ -53,7 +71,10 @@ function signup() {
         return;
     }
 
-    if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+    // Check for existing username (case-insensitive)
+    const userExists = users.some(u => u.username.toLowerCase() === username.toLowerCase());
+    
+    if (userExists) {
         alert('Username already exists');
         return;
     }
@@ -69,6 +90,8 @@ function signup() {
 
     currentUser = newUser;
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    
+    console.log('User created:', newUser);
     
     // Clear signup form
     document.getElementById('signupUsername').value = '';
