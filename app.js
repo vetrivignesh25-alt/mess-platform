@@ -1,21 +1,11 @@
 // Messaging Platform App
 let currentUser = null;
-let users = [];
+let users = JSON.parse(localStorage.getItem('users')) || [];
 let currentChat = null;
-let messages = {};
+let messages = JSON.parse(localStorage.getItem('messages')) || {};
 
 // Initialize
 window.addEventListener('load', () => {
-    // Clear all storage on first load to reset
-    if (!localStorage.getItem('initialized')) {
-        localStorage.clear();
-        localStorage.setItem('initialized', 'true');
-    }
-    
-    // Load fresh data
-    users = JSON.parse(localStorage.getItem('users')) || [];
-    messages = JSON.parse(localStorage.getItem('messages')) || {};
-    
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
         try {
@@ -30,14 +20,17 @@ window.addEventListener('load', () => {
     }
     
     // Add Enter key listener for message input
-    const messageInput = document.getElementById('messageInput');
-    if (messageInput) {
-        messageInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-    }
+    setTimeout(() => {
+        const messageInput = document.getElementById('messageInput');
+        if (messageInput) {
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        }
+    }, 100);
 });
 
 function toggleAuthMode() {
@@ -57,9 +50,6 @@ function signup() {
     const username = document.getElementById('signupUsername').value.trim();
     const password = document.getElementById('signupPassword').value;
     const confirm = document.getElementById('signupConfirm').value;
-
-    console.log('Sign up attempt:', username);
-    console.log('Current users:', users);
 
     if (!username || !password || !confirm) {
         alert('Please fill all fields');
@@ -90,8 +80,6 @@ function signup() {
 
     currentUser = newUser;
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
-    
-    console.log('User created:', newUser);
     
     // Clear signup form
     document.getElementById('signupUsername').value = '';
@@ -148,14 +136,17 @@ function loadApp() {
     loadUsers();
     
     // Re-attach Enter key listener after app loads
-    const messageInput = document.getElementById('messageInput');
-    if (messageInput) {
-        messageInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-    }
+    setTimeout(() => {
+        const messageInput = document.getElementById('messageInput');
+        if (messageInput) {
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        }
+    }, 100);
 }
 
 function showSection(sectionId) {
@@ -259,6 +250,15 @@ function openChat(userId, username) {
     // Focus on message input
     setTimeout(() => {
         document.getElementById('messageInput').focus();
+        const messageInput = document.getElementById('messageInput');
+        if (messageInput) {
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        }
     }, 100);
 }
 
@@ -284,8 +284,10 @@ function loadMessages() {
 }
 
 function sendMessage() {
-    const text = document.getElementById('messageInput').value.trim();
-    if (!text) return;
+    const messageInput = document.getElementById('messageInput');
+    const text = messageInput.value.trim();
+    
+    if (!text || !currentChat) return;
 
     const chatKey = [currentUser.id, currentChat.id].sort().join('_');
     if (!messages[chatKey]) {
@@ -299,7 +301,7 @@ function sendMessage() {
     });
 
     localStorage.setItem('messages', JSON.stringify(messages));
-    document.getElementById('messageInput').value = '';
+    messageInput.value = '';
     loadMessages();
-    document.getElementById('messageInput').focus();
+    messageInput.focus();
 }
