@@ -13,13 +13,29 @@ window.addEventListener('load', () => {
     } else {
         showSection('auth');
     }
+    
+    // Add Enter key listener for message input
+    const messageInput = document.getElementById('messageInput');
+    if (messageInput) {
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    }
 });
 
 function toggleAuthMode() {
-    document.getElementById('loginForm').style.display = 
-        document.getElementById('loginForm').style.display === 'none' ? 'flex' : 'none';
-    document.getElementById('signupForm').style.display = 
-        document.getElementById('signupForm').style.display === 'none' ? 'flex' : 'none';
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    
+    if (loginForm.style.display === 'none') {
+        loginForm.style.display = 'flex';
+        signupForm.style.display = 'none';
+    } else {
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'flex';
+    }
 }
 
 function signup() {
@@ -95,6 +111,16 @@ function loadApp() {
     showSection('app');
     loadContacts();
     loadUsers();
+    
+    // Re-attach Enter key listener after app loads
+    const messageInput = document.getElementById('messageInput');
+    if (messageInput) {
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    }
 }
 
 function showSection(sectionId) {
@@ -194,6 +220,11 @@ function openChat(userId, username) {
     document.getElementById('messageInput').value = '';
     loadMessages();
     loadContacts();
+    
+    // Focus on message input
+    setTimeout(() => {
+        document.getElementById('messageInput').focus();
+    }, 100);
 }
 
 function loadMessages() {
@@ -235,4 +266,5 @@ function sendMessage() {
     localStorage.setItem('messages', JSON.stringify(messages));
     document.getElementById('messageInput').value = '';
     loadMessages();
+    document.getElementById('messageInput').focus();
 }
