@@ -53,7 +53,7 @@ function signup() {
         return;
     }
 
-    if (users.some(u => u.username === username)) {
+    if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
         alert('Username already exists');
         return;
     }
@@ -69,6 +69,11 @@ function signup() {
 
     currentUser = newUser;
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    
+    // Clear signup form
+    document.getElementById('signupUsername').value = '';
+    document.getElementById('signupPassword').value = '';
+    document.getElementById('signupConfirm').value = '';
 
     loadApp();
 }
@@ -82,7 +87,7 @@ function login() {
         return;
     }
 
-    const user = users.find(u => u.username === username && u.password === password);
+    const user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
 
     if (!user) {
         alert('Invalid username or passcode');
@@ -91,6 +96,10 @@ function login() {
 
     currentUser = user;
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    
+    // Clear login form
+    document.getElementById('loginUsername').value = '';
+    document.getElementById('loginPassword').value = '';
 
     loadApp();
 }
@@ -105,6 +114,9 @@ function logout() {
     document.getElementById('signupForm').style.display = 'none';
     document.getElementById('loginUsername').value = '';
     document.getElementById('loginPassword').value = '';
+    document.getElementById('signupUsername').value = '';
+    document.getElementById('signupPassword').value = '';
+    document.getElementById('signupConfirm').value = '';
 }
 
 function loadApp() {
