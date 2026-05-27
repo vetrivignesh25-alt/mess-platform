@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messaging Platform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-content">
+                <h1 class="logo">💬 MessHub</h1>
+                <div class="nav-buttons">
+                    <button class="nav-btn active" onclick="showSection('auth')">Messages</button>
+                    <button class="nav-btn" onclick="window.location.href='weather-dashboard.html'">🌤️ Weather</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Authentication Section -->
+        <div id="auth" class="section active">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h2>Welcome to MessHub</h2>
+                    <p class="subtitle">Connect with friends instantly</p>
+                    
+                    <div id="loginForm" class="form-group">
+                        <h3>Login</h3>
+                        <input type="text" id="loginUsername" placeholder="Username" class="input-field">
+                        <input type="password" id="loginPassword" placeholder="Passcode" class="input-field">
+                        <button onclick="login()" class="btn btn-primary">Login</button>
+                        <p class="toggle-text">Don't have an account? <a onclick="toggleAuthMode()">Sign Up</a></p>
+                    </div>
+
+                    <div id="signupForm" class="form-group" style="display:none;">
+                        <h3>Create Account</h3>
+                        <input type="text" id="signupUsername" placeholder="Choose Username" class="input-field">
+                        <input type="password" id="signupPassword" placeholder="Create Passcode" class="input-field">
+                        <input type="password" id="signupConfirm" placeholder="Confirm Passcode" class="input-field">
+                        <button onclick="signup()" class="btn btn-primary">Sign Up</button>
+                        <p class="toggle-text">Already have an account? <a onclick="toggleAuthMode()">Login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main App Section -->
+        <div id="app" class="section" style="display:none;">
+            <div class="app-wrapper">
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <div class="sidebar-header">
+                        <h3>Users</h3>
+                        <button onclick="logout()" class="logout-btn">Logout</button>
+                    </div>
+                    
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search username..." class="input-field" oninput="searchUsers()">
+                    </div>
+
+                    <div class="contacts-section">
+                        <h4>My Contacts</h4>
+                        <div id="contactsList" class="contacts-list"></div>
+                    </div>
+
+                    <div class="users-section">
+                        <h4>Find Users</h4>
+                        <div id="usersList" class="users-list"></div>
+                    </div>
+                </aside>
+
+                <!-- Chat Area -->
+                <main class="chat-area">
+                    <div id="noChatSelected" class="no-chat">
+                        <p>Select a user to start messaging</p>
+                    </div>
+
+                    <div id="chatWindow" class="chat-window" style="display:none;">
+                        <div class="chat-header">
+                            <h3 id="chatUsername"></h3>
+                        </div>
+                        <div id="messagesList" class="messages-list"></div>
+                        <div class="message-input-area">
+                            <input type="text" id="messageInput" placeholder="Type a message..." class="input-field">
+                            <button onclick="sendMessage()" class="btn btn-send">Send</button>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

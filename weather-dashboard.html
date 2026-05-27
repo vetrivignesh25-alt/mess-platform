@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="weather-body">
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-content">
+                <h1 class="logo">🌤️ Weather Dashboard</h1>
+                <div class="nav-buttons">
+                    <button class="nav-btn" onclick="window.location.href='index.html'">💬 Messages</button>
+                    <button class="nav-btn active">Weather</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="weather-container">
+            <div class="search-section">
+                <div class="search-wrapper">
+                    <input type="text" id="cityInput" placeholder="Search for a city..." class="weather-input">
+                    <button onclick="searchWeather()" class="btn btn-primary">Search</button>
+                    <button onclick="getLocationWeather()" class="btn btn-secondary">📍 My Location</button>
+                </div>
+            </div>
+
+            <div class="quick-cities">
+                <button onclick="getWeatherByCity('London')" class="quick-btn">London</button>
+                <button onclick="getWeatherByCity('New York')" class="quick-btn">New York</button>
+                <button onclick="getWeatherByCity('Tokyo')" class="quick-btn">Tokyo</button>
+                <button onclick="getWeatherByCity('Paris')" class="quick-btn">Paris</button>
+                <button onclick="getWeatherByCity('Sydney')" class="quick-btn">Sydney</button>
+                <button onclick="getWeatherByCity('Dubai')" class="quick-btn">Dubai</button>
+            </div>
+
+            <div id="weatherContent" class="weather-content">
+                <div id="currentWeather" class="current-weather"></div>
+                <div id="forecast" class="forecast"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="weather.js"></script>
+</body>
+</html>
